@@ -1,0 +1,118 @@
+import turtle
+
+wn = turtle.Screen()
+wn.title("Ping - Pong")    # tytu³ gry
+wn.bgcolor("blue") # ustawiamy kolor t³¹
+wn.setup(width = 800 , height = 600)
+wn.tracer(0) # jest to opuŸnienie odœwie¿ania grafiki.
+
+#Poszczegolne wyniki
+wynikA = 0
+wynikB = 0
+# Paletka A
+paletkaA = turtle.Turtle()
+paletkaA.speed(0)
+paletkaA.shape("square")    # definicja kszta³tu
+paletkaA.color("white")     # color
+paletkaA.shapesize(stretch_wid=5, stretch_len=1)#rozmiar prostok¹ta
+paletkaA.penup()
+paletkaA.goto(-350,0)   # rozmieszczenie na ekranie
+
+# Paletka B
+paletkaB = turtle.Turtle()
+paletkaB.speed(0)
+paletkaB.shape("square")    # definicja kszta³tu
+paletkaB.color("white")     # color
+paletkaB.shapesize(stretch_wid=5, stretch_len=1)#rozmiar prostok¹ta
+paletkaB.penup()
+paletkaB.goto(350,0)   # rozmieszczenie na ekranie
+
+# Wyniki
+wynik = turtle.Turtle()
+wynik.speed(0)
+wynik.color("white")     # color
+wynik.penup()
+wynik.goto(0,260)   # rozmieszczenie na ekranie
+wynik.write("Player A:  Player B: ", align="Center", font=("Courier", 20))
+
+
+
+
+
+
+# Pi³ka
+
+pilka = turtle.Turtle()
+pilka.speed(0)
+pilka.shape("circle")    # definicja kszta³tu
+pilka.color("white")     # color
+pilka.penup()
+pilka.goto(0,0)   # rozmieszczenie na ekranie
+pilka.dx = 0.5
+pilka.dy = 0.5
+
+
+# Function
+
+def paletkaA_Up():
+    y = paletkaA.ycor()
+    y += 40
+    paletkaA.sety(y)
+
+def paletkaA_Down():
+    y = paletkaA.ycor()
+    y += -40
+    paletkaA.sety(y)
+
+def paletkaB_Up():
+    y = paletkaB.ycor()
+    y += 40
+    paletkaB.sety(y)
+
+def paletkaB_Down():
+    y = paletkaB.ycor()
+    y += -40
+    paletkaB.sety(y)
+
+
+# szukanie klawisza z klawiatury...wykona sie gdy nacisniemy klawisz
+wn.listen() # funkcja s³ucha
+wn.onkeypress(paletkaA_Up, "w")   #nacisnienie danego klawisza wywo³uje funkcje
+wn.onkeypress(paletkaA_Down, "s")   #nacisnienie danego klawisza wywo³uje funkcje
+wn.onkeypress(paletkaB_Up, "Up")   #nacisnienie danego klawisza wywo³uje funkcje
+wn.onkeypress(paletkaB_Down, "Down")   #nacisnienie danego klawisza wywo³uje funkcje
+
+# Main game pêtla loop
+while True:
+    wn.update()  # odœwie¿a grafikê
+    pilka.setx(pilka.xcor() + pilka.dx) # wykonuje ruch pi³ka x
+    pilka.sety(pilka.ycor() + pilka.dy) # wykonuje ruch pi³ka y
+# Border checking
+    if pilka.ycor() > 290:
+        pilka.sety(290)
+        pilka.dy *= -1
+
+    if pilka.ycor() < -290:
+        pilka.sety(-290)
+        pilka.dy *= -1
+
+    if pilka.xcor() > 390:
+        pilka.goto(0,0)
+        pilka.dx *= -1
+        wynikA += 1
+        wynik.clear()
+        wynik.write("Player A: {} Player B: {}".format(wynikA, wynikB), align="Center", font=("Courier", 20, "normal"))
+    if pilka.xcor() < -390:
+        pilka.goto(0,0)
+        pilka.dx *= -1
+        wynikB   +=1
+        wynik.clear()
+        wynik.write("Player A: {} Player B: {}".format(wynikA, wynikB), align="Center", font=("Courier", 20, "normal"))
+# Kolizja paletki i pi³ki
+    if pilka.xcor() > 340 and pilka.xcor() < 350 and (pilka.ycor() < paletkaB.ycor() + 40 and pilka.ycor() > paletkaB.ycor() - 40) :
+        pilka.setx(340)
+        pilka.dx *= -1
+
+    if pilka.xcor() < -340 and pilka.xcor() > -350 and (pilka.ycor() < paletkaA.ycor() + 40 and pilka.ycor() > paletkaA.ycor() - 40) :
+        pilka.setx(-340)
+        pilka.dx *= -1
